@@ -14,7 +14,7 @@ print(message);
       children: [
         CodeBlock(
           lang: 'language-dart',
-          value: "var message = 'hello';\nprint(message);",
+          value: "var message = 'hello';\nprint(message);\n",
         ),
       ],
     ),

@@ -81,10 +81,7 @@ List<String> allTags = [
   'br',
 ];
 
-List<String> tagsThatBecomeLiteral = [
-  'html',
-  'code',
-];
+List<String> tagsThatBecomeLiteral = ['html', 'code', 'pre'];
 
 List<String> tagsThatBecomeNode = ['br', 'img'];
 
@@ -118,16 +115,13 @@ class MdastTransformer implements md.NodeVisitor {
     (_nodeStack.last as Parent).children.add(Text(value: content));
   }
 
-  Map<String, Type> elementToNodeType = {
-    'code': Literal,
-  };
-
   // "Before" refers to when this node is visited in relation to it's
   // children, not to the Element before this one.
   @override
   bool visitElementBefore(md.Element element) {
+    // This is more accurately "nodes that should return false,
+    // despite having children.
     if (tagsThatBecomeLiteral.contains(element.tag)) {
-      // handle literal
       (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
       return false;
     } else if (tagsThatBecomeNode.contains(element.tag)) {
@@ -161,7 +155,7 @@ class MdastTransformer implements md.NodeVisitor {
 Node getNodeFromElement(md.Element el) {
   return switch (el.tag) {
     'blockquote' => Blockquote(children: []),
-    'code' => _buildCodeBlock(el),
+    'pre' => _buildCodeBlock(el),
     'ul' => BulletList(children: []),
     'li' => ListItem(children: []),
     'strong' => Strong(children: <Node>[]),
@@ -170,12 +164,18 @@ Node getNodeFromElement(md.Element el) {
   };
 }
 
-CodeBlock _buildCodeBlock(md.Element el) {
+Node _buildCodeBlock(md.Element el) {
+  /// Block level code starts with a `pre` tag
   if (el
       case md.Element(
-        tag: 'code',
-        attributes: {'class': String language},
-        children: <md.Node>[md.Text codeValue],
+        tag: 'pre',
+        children: [
+          md.Element(
+            tag: 'code',
+            attributes: {'class': String language},
+            children: <md.Node>[md.Text codeValue],
+          ),
+        ],
       )) {
     return CodeBlock(
       value: codeValue.textContent,
@@ -183,7 +183,26 @@ CodeBlock _buildCodeBlock(md.Element el) {
     );
   }
 
-  throw MarkdownTransformException('Failed to transform code tag', source: el);
+  throw MarkdownTransformException(
+    'Failed to transform `pre` element into CodeBlock ',
+    source: el,
+  );
+}
+
+Node _buildInlineCode(md.Element el) {
+  /// Inline code starts with `code`
+  if (el
+      case md.Element(
+        tag: 'code',
+        children: <md.Node>[md.Text codeValue],
+      )) {
+    return InlineCode(value: codeValue.textContent);
+  }
+
+  throw MarkdownTransformException(
+    'Failed to transform `code` element into inline code ',
+    source: el,
+  );
 }
 
 /// Thrown when the Markdown to Mdast transformer encounters
