@@ -10,7 +10,7 @@ class ImageReference extends Node implements Reference, Alternative {
   ImageReference({
     required this.identifier,
     required this.referenceType,
-    required super.position,
+    super.position,
     this.alt,
     this.label,
     super.attributes,
@@ -35,10 +35,11 @@ class ImageReference extends Node implements Reference, Alternative {
       'identifier': identifier,
       if (alt != null) 'alt': alt,
       if (label != null) 'label': label,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

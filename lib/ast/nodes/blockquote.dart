@@ -6,8 +6,8 @@ class Blockquote extends Parent {
   String get type => 'blockquote';
 
   Blockquote({
-    required super.children,
-    required super.position,
+    super.children,
+    super.position,
     super.attributes,
   });
 
@@ -16,11 +16,12 @@ class Blockquote extends Parent {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'children': children.map((child) => child.toMap()),
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      'children': children.map((child) => child.toMap()).toList(),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

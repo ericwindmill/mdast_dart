@@ -6,7 +6,7 @@ class Break extends Node {
   String get type => 'break';
 
   Break({
-    required super.position,
+    super.position,
     super.attributes,
   });
 
@@ -14,10 +14,11 @@ class Break extends Node {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

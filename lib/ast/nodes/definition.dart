@@ -1,7 +1,6 @@
 import '../abstract_nodes/ast.dart';
 import '../mixins/association.dart';
 import '../mixins/resource.dart';
-import '../utils/extensions.dart';
 
 /// Definition represents a resource.
 /// Definition should be associated with LinkReferences and ImageReferences.
@@ -14,7 +13,7 @@ class Definition extends Node implements Association, Resource {
     this.label,
     this.title,
     required this.url,
-    required super.position,
+    super.position,
     super.attributes,
   });
 
@@ -37,10 +36,6 @@ class Definition extends Node implements Association, Resource {
       if (label != null) 'label': label,
       if (title != null) 'title': title,
       'url': url,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
       'attributes': attributes,
     };
   }

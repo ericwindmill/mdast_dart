@@ -16,8 +16,8 @@ class FootnoteDefinition extends Parent implements Association {
   String get type => 'footnoteDefinition';
 
   FootnoteDefinition({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     required this.identifier,
     this.label,
     super.attributes,
@@ -35,11 +35,12 @@ class FootnoteDefinition extends Parent implements Association {
       'type': type,
       'identifier': identifier,
       if (label != null) 'label': label,
-      'children': children.map((child) => child.toMap()),
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      'children': children.map((child) => child.toMap()).toList(),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

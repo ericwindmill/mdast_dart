@@ -7,8 +7,8 @@ import '../utils/extensions.dart';
 /// https://github.com/syntax-tree/mdast#list
 abstract class _List extends Parent {
   _List({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     this.ordered = false,
     this.spread = false,
     super.attributes,
@@ -31,8 +31,8 @@ class OrderedList extends _List {
   final String type = 'orderedList';
 
   OrderedList({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.spread,
     super.ordered = true,
     required this.start,
@@ -50,11 +50,12 @@ class OrderedList extends _List {
       'type': type,
       if (ordered != null) 'ordered': ordered,
       if (spread != null) 'spread': spread,
-      'position': {
-        'start': position.start,
-        'end': position.end,
-      },
-      'children': children.map((child) => child.toMap()),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
+      'children': children.map((child) => child.toMap()).toList(),
       'attributes': attributes,
     };
   }
@@ -66,8 +67,8 @@ class BulletList extends _List {
   String get type => 'bulletList';
 
   BulletList({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.ordered = false,
     super.spread,
     super.attributes,
@@ -79,11 +80,12 @@ class BulletList extends _List {
       'type': type,
       if (ordered != null) 'ordered': ordered,
       if (spread != null) 'spread': spread,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
-      'children': children.map((child) => child.toMap()),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
+      'children': children.map((child) => child.toMap()).toList(),
       'attributes': attributes,
     };
   }

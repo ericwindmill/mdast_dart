@@ -6,7 +6,7 @@ typedef Position = ({SourceLocation start, SourceLocation end});
 /// Implements unist specification https://github.com/syntax-tree/unist#nodes
 abstract class Node {
   Node({
-    required this.position,
+    this.position,
     this.attributes = const {},
   });
 
@@ -15,7 +15,7 @@ abstract class Node {
   /// This field can be used to determine the type a node implements.
   String get type;
 
-  final Position position;
+  final Position? position;
 
   /// Added to allow implementers to extend the functionality
   Map<String, dynamic> attributes;

@@ -6,7 +6,7 @@ class ThematicBreak extends Node {
   String get type => 'thematicBreak';
 
   ThematicBreak({
-    required super.position,
+    super.position,
     super.attributes,
   });
 
@@ -14,10 +14,11 @@ class ThematicBreak extends Node {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

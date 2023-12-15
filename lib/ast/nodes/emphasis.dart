@@ -6,8 +6,8 @@ class Emphasis extends Parent {
   String get type => 'emphasis';
 
   Emphasis({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.attributes,
   });
 }

@@ -2,8 +2,8 @@ import '../abstract_nodes/ast.dart';
 
 class HtmlBlock extends Parent {
   HtmlBlock({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.attributes,
   });
 

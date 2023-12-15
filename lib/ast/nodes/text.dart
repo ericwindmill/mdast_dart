@@ -8,5 +8,5 @@ class Text extends Literal {
   @override
   String get type => 'Text';
 
-  Text({required super.value, required super.position, super.attributes});
+  Text({required super.value, super.position, super.attributes});
 }

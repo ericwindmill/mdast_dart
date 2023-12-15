@@ -16,7 +16,7 @@ class FootnoteReference extends Node implements Association {
   String get type => 'footnoteReference';
 
   FootnoteReference({
-    required super.position,
+    super.position,
     required this.identifier,
     this.label,
     super.attributes,
@@ -34,10 +34,11 @@ class FootnoteReference extends Node implements Association {
       'type': type,
       'identifier': identifier,
       if (label != null) 'label': label,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

@@ -12,8 +12,8 @@ class Paragraph extends Parent {
   String get type => 'paragraph';
 
   Paragraph({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.attributes,
   });
 }

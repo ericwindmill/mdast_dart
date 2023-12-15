@@ -11,8 +11,8 @@ class Root extends Parent {
   String get type => 'root';
 
   Root({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     super.attributes,
   });
 }

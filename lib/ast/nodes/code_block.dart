@@ -1,13 +1,13 @@
 import '../abstract_nodes/ast.dart';
 import '../utils/extensions.dart';
 
-class CodeBlock extends Parent {
+class CodeBlock extends Literal {
   @override
   String get type => 'code';
 
   CodeBlock({
-    required super.position,
-    required super.children,
+    super.position,
+    required super.value,
     this.lang,
     this.meta,
     super.attributes,
@@ -25,16 +25,15 @@ class CodeBlock extends Parent {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'children': children,
+      'value': value,
       if (lang != null) 'lang': lang,
       if (meta != null) 'meta': meta,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }
-
-  List<Object?> get props => throw UnimplementedError();
 }

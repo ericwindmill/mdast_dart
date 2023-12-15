@@ -15,8 +15,8 @@ class LinkReference extends Parent implements Reference {
   String get type => 'linkReference';
 
   LinkReference({
-    required super.position,
-    required super.children,
+    super.position,
+    super.children,
     required this.identifier,
     this.label,
     required this.referenceType,
@@ -39,11 +39,12 @@ class LinkReference extends Parent implements Reference {
       'identifier': identifier,
       'referenceType': referenceType.name,
       if (label != null) 'label': label,
-      'children': children.map((child) => child.toMap()),
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      'children': children.map((child) => child.toMap()).toList(),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

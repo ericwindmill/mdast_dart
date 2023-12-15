@@ -8,7 +8,7 @@ class Image extends Node implements Resource, Alternative {
   String get type => 'image';
 
   Image({
-    required super.position,
+    super.position,
     required this.url,
     this.title,
     this.alt,
@@ -31,10 +31,11 @@ class Image extends Node implements Resource, Alternative {
       'url': url,
       if (title != null) 'title': title,
       if (alt != null) 'alt': alt,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

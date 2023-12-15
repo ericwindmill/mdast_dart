@@ -10,7 +10,7 @@ import '../abstract_nodes/ast.dart';
 /// https://github.com/syntax-tree/mdast#inlinecode
 class InlineCode extends Literal {
   InlineCode({
-    required super.position,
+    super.position,
     required super.value,
     super.attributes,
   });

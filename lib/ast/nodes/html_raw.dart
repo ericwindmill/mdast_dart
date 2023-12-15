@@ -11,7 +11,7 @@ class Html extends Literal {
   String get type => 'html';
 
   Html({
-    required super.position,
+    super.position,
     required super.value,
     super.attributes,
   });

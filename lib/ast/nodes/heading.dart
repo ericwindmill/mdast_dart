@@ -7,8 +7,8 @@ class Heading extends Parent {
   String get type => 'heading';
 
   Heading({
-    required super.children,
-    required super.position,
+    super.children,
+    super.position,
     required this.depth,
     super.attributes,
   }) : assert(depth >= 1 && depth <= 6);
@@ -19,12 +19,13 @@ class Heading extends Parent {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'children': children.map((child) => child.toMap()),
+      'children': children.map((child) => child.toMap()).toList(),
       'depth': depth,
-      'position': {
-        'start': position.start.toMap(),
-        'end': position.end.toMap(),
-      },
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
       'attributes': attributes,
     };
   }

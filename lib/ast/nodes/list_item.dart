@@ -1,4 +1,5 @@
 import '../abstract_nodes/ast.dart';
+import '../utils/extensions.dart';
 
 class ListItem extends Parent {
   @override
@@ -6,8 +7,8 @@ class ListItem extends Parent {
 
   ListItem({
     this.spread,
-    required super.children,
-    required super.position,
+    super.children,
+    super.position,
     super.attributes,
   });
 
@@ -18,11 +19,12 @@ class ListItem extends Parent {
     return {
       'type': type,
       if (spread != null) 'spread': spread,
-      'position': {
-        'start': position.start,
-        'end': position.end,
-      },
-      'children': children.map((child) => child.toMap()),
+      if (position != null)
+        'position': {
+          'start': position!.start.toMap(),
+          'end': position!.end.toMap(),
+        },
+      'children': children.map((child) => child.toMap()).toList(),
       'attributes': attributes,
     };
   }
