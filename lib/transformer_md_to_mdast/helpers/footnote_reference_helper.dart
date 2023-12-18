@@ -1,9 +1,7 @@
 import 'package:markdown/markdown.dart' as md;
-import 'package:mdast_dart/transformer_helpers/transformer_exception.dart';
 
-import '../ast/abstract_nodes/ast_node.dart';
-import '../ast/nodes/nodes.dart';
-import '../mdast_dart.dart';
+import '../../mdast_dart.dart';
+import '../transformer_exception.dart';
 
 Node buildFootnoteRefNode(md.Element el) {
   if (el

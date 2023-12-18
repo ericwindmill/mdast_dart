@@ -2,33 +2,39 @@ import 'package:mdast_dart/ast/nodes/nodes.dart';
 
 import '../../mdast_dart_test.dart';
 
-final inlineImageTestCases = [
+final imageReferenceCase = [
   TestCase(
-    syntax: 'Image',
-    markdown: '![foo](/url "title")',
+    syntax: 'ImageReference',
+    markdown: '''
+![Foo]
+
+[foo]: /url "title"   
+''',
     mdast: Root(
       children: [
         Paragraph(
           children: [
-            Image(url: '/url', title: 'title', alt: 'foo'),
+            Image(url: '/url', alt: 'Foo', title: 'title'),
           ],
         ),
       ],
     ),
   ),
   TestCase(
-    syntax: 'Image',
+    syntax: 'ImageReference',
     markdown: '''
-![foo *bar*][]
+![aaa][bbb]
 
-[foo *bar*]: train.jpg "train & tracks"    
+[bbb]: /iRefUrl    
 ''',
     mdast: Root(
       children: [
         Paragraph(
           children: [
             Image(
-                url: 'train.jpg', title: 'train &amp; tracks', alt: 'foo bar'),
+              url: '/iRefUrl',
+              alt: 'aaa',
+            ),
           ],
         ),
       ],

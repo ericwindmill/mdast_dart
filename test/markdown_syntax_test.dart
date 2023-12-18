@@ -7,20 +7,21 @@ import 'resources/syntax_test_cases/syntax_test_cases.dart';
 
 void main() {
   var syntaxTestCases = [
-    // bulletListTestCases,
-    // blockquoteCases,
-    // bulletListTestCases,
-    // codeBlockTestCases,
-    // emphasisTestCases,
-    // footnoteTestcases,
-    // headingTestCases,
-    // htmlBlockTestCase,
+    bulletListTestCases,
+    blockquoteCases,
+    bulletListTestCases,
+    codeBlockTestCases,
+    emphasisTestCases,
+    footnoteTestcases,
+    headingTestCases,
+    htmlBlockTestCase,
+    imageReferenceCase,
     inlineImageTestCases,
-    // inlineCodeTestCases,
-    // orderedListTestCases,
-    // paragraphTestCases,
-    // strongTestCases,
-    // thematicBreakTestCases,
+    inlineCodeTestCases,
+    orderedListTestCases,
+    paragraphTestCases,
+    strongTestCases,
+    thematicBreakTestCases,
   ];
 
   group("transform md.Element objects into Mdast nodes", () {
