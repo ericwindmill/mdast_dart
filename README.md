@@ -2,12 +2,12 @@
 
 **M**ark**d**own **A**bstract **S**yntax **T**ree.
 
-This package transforms markdown into an [_intermediate representation_](https://en.wikipedia.org/wiki/Intermediate_representation),
+This package transforms markdown into an [intermediate representation][],
 AST nodes. The goal of this is to make written content easier to
 work with in Flutter.
 
 The AST nodes in this package are a Dart 
-implementation of [mdast](https://github.com/syntax-tree/mdast).
+implementation of [mdast][].
 
 ## Why use this package
 
@@ -22,7 +22,7 @@ of Dart objects, making it easier to work with the data into your Flutter app.
 
 **Note:** This package is not a renderer. It will not create widgets for you. If you just
 want to render markdown in your Flutter app, and you aren't concerned with 
-making a highly customized experience, you should use [flutter_markdown]().
+making a highly customized experience, you should use [flutter_markdown][].
 
 ## Usage
 
@@ -86,7 +86,7 @@ include [Content Models](https://github.com/syntax-tree/mdast#content-model).
 ## Markdown transformer
 
 In its current implementation, the markdown-to-mdast transformer 
-is built on top of the [markdown](https://pub.dev/package/markdown) package. 
+is built on top of the [markdown package][]. 
 This package does not parse the markdown itself. 
 Rather, the markdown package transforms the markdown into its own AST, which
 is a list of `Element` objects that have an html `tag`. This package 
@@ -120,7 +120,7 @@ plus footnotes.
 * section
 * sup
 
-**Any markdown syntax that the [markdown][] package does not parse into 
+**Any markdown syntax that the [markdown package][] does not parse into 
 an `Element` with these tags will break the markdown-to-mdast transformer.**
 
 
@@ -139,13 +139,13 @@ be converted back into markdown. The current version of this package
 is not suitable to transform an mdast AST back into markdown 
 _in it's exact original form_. 
 
-First, because the [markdown][] doesn't
+First, because the [markdown package][] doesn't
 provide positional information of the individual nodes in it's AST. Therefor,
 you cannot re-render markdown and be sure that every bit of content is in the
 same position.
 
 If you are concerned with parsing markdown into an AST, and back into markdown,
-you can use the [dart markdown pub package][].
+you can use the [markdown-dart pub package][].
 
 Secondly, the markdown package's AST isn't concerned with ImageReferences
 or LinkReferences. 
@@ -172,7 +172,7 @@ The AST nodes in this package are a Dart implementation of mdast.
 
 ```
 
-The [markdown][] package indiscriminately parses the links in both examples 
+The [markdown package][]  indiscriminately parses the links in both examples 
 to the equivalent `Element`s with the same "img" tag.
 The same is true of Images and Image references.  
 This makes sense if your goal is to render HTML.
@@ -184,8 +184,17 @@ if the link was inline or a link reference, and therefor never adds a
 
 ### Planned updates, hinging on usefulness of proof of concept
 
-- [] Fork [markdown][] and refactor it to produce mdast nodes directly.
+- [] Fork [markdown package][] and refactor it to produce mdast nodes directly.
 - [] Forked version should also convert mdast nodes into HTML.
 - [] Add AST nodes for common markdown flavors, such as Github Flavored Markdown.
 - [] Add build_runner to transformer
 - [] Add hooks into build process, allowing users to define custom markdown syntax.
+
+[flutter_markdown]: https://github.com/flutter/packages/tree/main/packages/flutter_markdown
+[markdown package]: https://pub.dev/package/markdown
+[markdown-dart pub package]: https://github.com/DrafaKiller/Markdown-dart/tree/main 
+[intermediate representation]: https://en.wikipedia.org/wiki/Intermediate_representation
+[mdast]: https://github.com/syntax-tree/mdast
+[markdown]: https://daringfireball.net/projects/markdown/
+[commonmark]: https://commonmark.org
+[gfm]: https://github.github.com/gfm/
