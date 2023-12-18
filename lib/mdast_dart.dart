@@ -2,6 +2,8 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:mdast_dart/ast/abstract_nodes/ast.dart';
 
 import 'ast/nodes/nodes.dart';
+import 'transformer_helpers/html_helper.dart';
+import 'transformer_helpers/md_element_to_mdast.dart';
 
 Root markdownToMdast(
   String markdown, {
@@ -29,28 +31,9 @@ Root markdownToMdast(
 
   final nodes = document.parse(markdown);
 
-  final mdastTransformer = MdastTransformer(Root(children: []));
+  final mdastTransformer = MdastTransformer();
   return mdastTransformer.transform(nodes);
 }
-
-/// Mdast nodes are of type Literal, Parent, or (rarely) Node
-/// These don't map cleanly to Markdown's block and inline syntax,
-/// nor does it map cleanly to [md.Element]s with children and without.
-/// For example, the Mdast [CodeBlock] node is a Literal, but the
-/// [md.Element] types 'pre' and 'code' have children.
-///
-/// Effectively, this means that we can't cleanly distinguish between
-/// elements that have children and don't. Rather, each element-to-node
-/// combination must be put into a particular bucket.
-///
-/// All tags:
-///
-///
-/// - Block elements that become Parents
-/// - Block elements that become Literals (such as
-/// - Inline elements that become Parents (such as 'em' or 'strong' => [Strong])
-/// - Inline elements that become Literals (such as 'code' => [InlineCode])
-///
 
 List<String> allTags = [
   'blockquote',
@@ -79,6 +62,8 @@ List<String> allTags = [
   'strong',
   'img',
   'br',
+  'section', // Used for list of footnotes
+  'sup' // superscript -> The text that links to the foot note.
 ];
 
 List<String> tagsThatBecomeLiteral = ['html', 'code', 'pre'];
@@ -86,11 +71,15 @@ List<String> tagsThatBecomeLiteral = ['html', 'code', 'pre'];
 List<String> tagsThatBecomeNode = ['br', 'img'];
 
 class MdastTransformer implements md.NodeVisitor {
-  final Root _root;
+  late final Root _root;
   Set<String> uniqueIds = {};
   final _nodeStack = <Node>[];
 
-  MdastTransformer(this._root) {
+  MdastTransformer() {
+    _root = Root(
+      children: [],
+      footnotes: {},
+    );
     _nodeStack.add(_root);
   }
 
@@ -112,30 +101,53 @@ class MdastTransformer implements md.NodeVisitor {
   void visitText(md.Text text) {
     var content = text.textContent;
 
+    /// Blocks of Html are parsed as [md.Text] objects with no identifiers
+    if (htmlBlockPattern.hasMatch(content)) {
+      (_nodeStack.last as Parent).children.add(Html(value: content));
+      return;
+    }
+
     (_nodeStack.last as Parent).children.add(Text(value: content));
   }
 
-  // "Before" refers to when this node is visited in relation to it's
-  // children, not to the Element before this one.
+  /// Called when a new element is reached for the first time,
+  /// _before_ it's children
   @override
   bool visitElementBefore(md.Element element) {
-    // This is more accurately "nodes that should return false,
-    // despite having children.
-    if (tagsThatBecomeLiteral.contains(element.tag)) {
+    // Elements with these tags will have children, but will still return false
+    if (['html', 'code', 'pre', 'sup'].contains(element.tag)) {
       (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
       return false;
+
+      /// Not sure yet
     } else if (tagsThatBecomeNode.contains(element.tag)) {
       // handle node
       (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
       return false;
-    } else if (!element.isEmpty) {
+
+      // The rest of elements that have children
+    }
+
+    /// [md.Element]s with these tags return List<Node>
+    else if (['section'].contains(element.tag)) {
+      // TODO(ewindmill) Are the only nodes in this clause ones that will be
+      // added directly to the root?
+      final nodes = getNodesFromElement(element);
+      if (nodes.first is FootnoteDefinition) {
+        for (var (node as FootnoteDefinition) in nodes) {
+          _root.footnotes[node.identifier] = node;
+        }
+      }
+      return false;
+    }
+
+    /// The standard case: All elements that have children,
+    /// and don't have special rule.s
+    else if (!element.isEmpty) {
       _nodeStack.add(getNodeFromElement(element));
       return true;
     } else {
-      throw MarkdownTransformException(
-        'Element has unknown tag type: ${element.tag}',
-        source: element,
-      );
+      throw "shit";
     }
   }
 
@@ -149,84 +161,5 @@ class MdastTransformer implements md.NodeVisitor {
     if (_nodeStack.isNotEmpty) {
       (_nodeStack.last as Parent).children.add(currentNode);
     }
-  }
-}
-
-Node getNodeFromElement(md.Element el) {
-  return switch (el.tag) {
-    'blockquote' => Blockquote(children: []),
-    'pre' => _buildCodeBlock(el),
-    'ul' => BulletList(children: []),
-    'li' => ListItem(children: []),
-    'strong' => Strong(children: <Node>[]),
-    'p' => Paragraph(children: <Node>[]),
-    _ => throw ('Unknown tag type ${el.tag}'),
-  };
-}
-
-Node _buildCodeBlock(md.Element el) {
-  /// Block level code starts with a `pre` tag
-  if (el
-      case md.Element(
-        tag: 'pre',
-        children: [
-          md.Element(
-            tag: 'code',
-            attributes: {'class': String language},
-            children: <md.Node>[md.Text codeValue],
-          ),
-        ],
-      )) {
-    return CodeBlock(
-      value: codeValue.textContent,
-      lang: language,
-    );
-  }
-
-  throw MarkdownTransformException(
-    'Failed to transform `pre` element into CodeBlock ',
-    source: el,
-  );
-}
-
-Node _buildInlineCode(md.Element el) {
-  /// Inline code starts with `code`
-  if (el
-      case md.Element(
-        tag: 'code',
-        children: <md.Node>[md.Text codeValue],
-      )) {
-    return InlineCode(value: codeValue.textContent);
-  }
-
-  throw MarkdownTransformException(
-    'Failed to transform `code` element into inline code ',
-    source: el,
-  );
-}
-
-/// Thrown when the Markdown to Mdast transformer encounters
-/// an [md.Element] that is cannot convert to an Mdast node
-class MarkdownTransformException implements Exception {
-  final String message;
-  final md.Element? source;
-
-  MarkdownTransformException(
-    this.message, {
-    this.source,
-  });
-
-  @override
-  String toString() {
-    String report = 'MarkdownTransformException: $message';
-
-    if (source != null) {
-      report += '\n Element: ${source!.tag}';
-      if (source!.generatedId != null) {
-        report += '\n generatedId: ${source!.generatedId}';
-      }
-    }
-
-    return report;
   }
 }

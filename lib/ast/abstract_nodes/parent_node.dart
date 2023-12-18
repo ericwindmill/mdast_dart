@@ -5,10 +5,10 @@ import '../utils/extensions.dart';
 /// such as Text, Code block,
 abstract class Parent extends Node {
   Parent({
-    this.children = const [],
+    List<Node>? children,
     super.position,
     super.attributes,
-  });
+  }) : children = children ?? [];
 
   final List<Node> children;
 

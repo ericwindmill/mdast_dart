@@ -7,7 +7,7 @@ import '../utils/extensions.dart';
 /// https://github.com/syntax-tree/mdast#link
 class Link extends Parent implements Resource {
   @override
-  String get type => 'type';
+  String get type => 'link';
 
   Link({
     super.position,

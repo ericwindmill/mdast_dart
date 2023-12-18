@@ -5,10 +5,12 @@ import 'package:mdast_dart/mdast_dart.dart';
 import 'package:test/test.dart';
 
 class TestCase {
+  final String syntax;
   final String markdown;
   final Root mdast;
 
   TestCase({
+    required this.syntax,
     required this.markdown,
     required this.mdast,
   });

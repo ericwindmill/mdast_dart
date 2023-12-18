@@ -6,7 +6,7 @@ import '../abstract_nodes/ast.dart';
 /// represented by its value field.
 class Text extends Literal {
   @override
-  String get type => 'Text';
+  String get type => 'text';
 
   Text({required super.value, super.position, super.attributes});
 }

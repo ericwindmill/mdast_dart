@@ -1,3 +1,5 @@
+import 'package:mdast_dart/ast/nodes/nodes.dart';
+
 import '../abstract_nodes/ast.dart';
 
 /// Root (Parent) represents a document.
@@ -10,9 +12,15 @@ class Root extends Parent {
   @override
   String get type => 'root';
 
+  /// A map of footnote identifiers to [FootnoteDefinition]
+  /// In Markdown to HTML, footnotes are often added at the bottom of a
+  /// document in a `<section>` tag. This map is the IR of that section tag.
+  Map<String, FootnoteDefinition> footnotes;
+
   Root({
     super.position,
     super.children,
     super.attributes,
-  });
+    Map<String, FootnoteDefinition>? footnotes,
+  }) : footnotes = footnotes ?? {};
 }

@@ -4,6 +4,7 @@ import '../mdast_dart_test.dart';
 
 final blockquoteCases = [
   TestCase(
+    syntax: 'Blockquote',
     markdown: '''
 > Foo
 > bar
@@ -24,6 +25,7 @@ final blockquoteCases = [
     ),
   ),
   TestCase(
+    syntax: 'Blockquote',
     markdown: '''
 > However, because of laziness, a blank line is needed between a block quote and a following paragraph:
 ''',

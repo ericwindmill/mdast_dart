@@ -4,6 +4,7 @@ import '../mdast_dart_test.dart';
 
 final codeBlockTestCases = [
   TestCase(
+    syntax: 'CodeBlock',
     markdown: '''
 ```dart
 var message = 'hello';
