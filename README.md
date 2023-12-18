@@ -184,11 +184,11 @@ if the link was inline or a link reference, and therefor never adds a
 
 ### Planned updates, hinging on usefulness of proof of concept
 
-- [] Fork [markdown package][] and refactor it to produce mdast nodes directly.
-- [] Forked version should also convert mdast nodes into HTML.
-- [] Add AST nodes for common markdown flavors, such as Github Flavored Markdown.
-- [] Add build_runner to transformer
-- [] Add hooks into build process, allowing users to define custom markdown syntax.
+- [ ] Fork [markdown package][] and refactor it to produce mdast nodes directly.
+- [ ] Forked version should also convert mdast nodes into HTML.
+- [ ] Add AST nodes for common markdown flavors, such as Github Flavored Markdown.
+- [ ] Add build_runner to transformer
+- [ ] Add hooks into build process, allowing users to define custom markdown syntax.
 
 [flutter_markdown]: https://github.com/flutter/packages/tree/main/packages/flutter_markdown
 [markdown package]: https://pub.dev/package/markdown
