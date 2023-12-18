@@ -1,21 +1,19 @@
 import 'package:mdast_dart/ast/nodes/nodes.dart';
 
-import '../mdast_dart_test.dart';
+import '../../mdast_dart_test.dart';
 
-final emphasisTestCases = [
+final strongTestCases = [
   TestCase(
-    syntax: 'Emphasis',
-    markdown: 'this is _emphasized_ text',
+    syntax: 'Strong',
+    markdown: 'this is **strong** text',
     mdast: Root(
       children: [
         Paragraph(
           children: [
             Text(value: 'this is '),
-            Emphasis(
-              children: [
-                Text(value: 'emphasized'),
-              ],
-            ),
+            Strong(children: [
+              Text(value: 'strong'),
+            ]),
             Text(value: ' text'),
           ],
         ),

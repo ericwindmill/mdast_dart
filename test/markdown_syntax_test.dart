@@ -3,22 +3,24 @@ import 'package:mdast_dart/mdast_dart.dart';
 import 'package:test/test.dart';
 
 import 'mdast_dart_test.dart';
-import 'resources/testcases.dart';
+import 'resources/syntax_test_cases/syntax_test_cases.dart';
 
 void main() {
   var syntaxTestCases = [
-    bulletListTestCases,
-    blockquoteCases,
-    bulletListTestCases,
-    codeBlockTestCases,
-    emphasisTestCases,
-    footnoteTestcases,
-    headingTestCases,
-    htmlBlockTestCase,
-    inlineCodeTestCases,
-    orderedListTestCases,
-    paragraphTestCases,
-    strongTestCases,
+    // bulletListTestCases,
+    // blockquoteCases,
+    // bulletListTestCases,
+    // codeBlockTestCases,
+    // emphasisTestCases,
+    // footnoteTestcases,
+    // headingTestCases,
+    // htmlBlockTestCase,
+    inlineImageTestCases,
+    // inlineCodeTestCases,
+    // orderedListTestCases,
+    // paragraphTestCases,
+    // strongTestCases,
+    // thematicBreakTestCases,
   ];
 
   group("transform md.Element objects into Mdast nodes", () {

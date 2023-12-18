@@ -9,25 +9,28 @@ Node getNodeFromElement(md.Element el) {
   return switch (el) {
     md.Element(tag: 'a', attributes: {'href': String href}) => Link(url: href),
     md.Element(tag: 'blockquote') => Blockquote(),
-    md.Element(tag: 'pre') => _buildCodeBlock(el),
     md.Element(tag: 'code') => _buildInlineCode(el),
     md.Element(tag: 'em') => Emphasis(),
-    md.Element(tag: 'ol', attributes: {'start': String start}) => OrderedList(
-        start: int.parse(start),
-      ),
-    md.Element(tag: 'ol') => OrderedList(start: 1),
-    md.Element(tag: 'ul') => BulletList(),
-    md.Element(tag: 'li') => ListItem(),
-    md.Element(tag: 'strong') => Strong(),
-    md.Element(tag: 'p') => Paragraph(),
     md.Element(tag: 'h1') => Heading(depth: 1),
     md.Element(tag: 'h2') => Heading(depth: 2),
     md.Element(tag: 'h3') => Heading(depth: 3),
     md.Element(tag: 'h4') => Heading(depth: 4),
     md.Element(tag: 'h5') => Heading(depth: 5),
     md.Element(tag: 'h6') => Heading(depth: 6),
+    md.Element(tag: 'hr') => ThematicBreak(),
     md.Element(tag: 'html') => Html(value: el.textContent),
+    md.Element(tag: 'li') => ListItem(),
+    md.Element(
+      tag: 'ol',
+      attributes: {'start': String start},
+    ) =>
+      OrderedList(start: int.parse(start)),
+    md.Element(tag: 'ol') => OrderedList(start: 1),
+    md.Element(tag: 'p') => Paragraph(),
+    md.Element(tag: 'pre') => _buildCodeBlock(el),
+    md.Element(tag: 'strong') => Strong(),
     md.Element(tag: 'sup') => buildFootnoteRefNode(el),
+    md.Element(tag: 'ul') => BulletList(),
     _ => throw ('Unknown tag type ${el.tag}'),
   };
 }

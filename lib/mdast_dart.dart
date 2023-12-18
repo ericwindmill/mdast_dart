@@ -46,7 +46,6 @@ List<String> allTags = [
   'h5',
   'h6',
   'hr',
-  'html',
   'ol',
   'ul',
   'li',
@@ -65,10 +64,6 @@ List<String> allTags = [
   'section', // Used for list of footnotes
   'sup' // superscript -> The text that links to the foot note.
 ];
-
-List<String> tagsThatBecomeLiteral = ['html', 'code', 'pre'];
-
-List<String> tagsThatBecomeNode = ['br', 'img'];
 
 class MdastTransformer implements md.NodeVisitor {
   late final Root _root;
@@ -114,22 +109,8 @@ class MdastTransformer implements md.NodeVisitor {
   /// _before_ it's children
   @override
   bool visitElementBefore(md.Element element) {
-    // Elements with these tags will have children, but will still return false
-    if (['html', 'code', 'pre', 'sup'].contains(element.tag)) {
-      (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
-      return false;
-
-      /// Not sure yet
-    } else if (tagsThatBecomeNode.contains(element.tag)) {
-      // handle node
-      (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
-      return false;
-
-      // The rest of elements that have children
-    }
-
     /// [md.Element]s with these tags return List<Node>
-    else if (['section'].contains(element.tag)) {
+    if (['section'].contains(element.tag)) {
       // TODO(ewindmill) Are the only nodes in this clause ones that will be
       // added directly to the root?
       final nodes = getNodesFromElement(element);
@@ -138,6 +119,16 @@ class MdastTransformer implements md.NodeVisitor {
           _root.footnotes[node.identifier] = node;
         }
       }
+      return false;
+    }
+
+    /// [md.Elements] tags who do not need their children visited
+    /// This can be because they have no children, or because they are
+    /// a special case in which their children are transformed outside this
+    /// visitor
+    /// Elements will return false if they have no children,
+    else if (['code', 'pre', 'sup', 'br', 'hr', 'img'].contains(element.tag)) {
+      (_nodeStack.last as Parent).children.add(getNodeFromElement(element));
       return false;
     }
 

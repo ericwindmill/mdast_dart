@@ -1,6 +1,6 @@
 import 'package:mdast_dart/ast/nodes/nodes.dart';
 
-import '../mdast_dart_test.dart';
+import '../../mdast_dart_test.dart';
 
 // Text blocks that originate from HTML in the dart/markdown package
 // preserve white space and new lines
